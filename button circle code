@@ -1,0 +1,80 @@
+import React, { useState } from "react";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+
+function CircleComponent(props) {
+  const [isGrey, setIsGrey] = useState(false);
+  const handleCount = () => {
+    if (isGrey) {
+      setIsGrey(false);
+      props.handleGreyCount(-1);
+    } else {
+      setIsGrey(true);
+      props.handleGreyCount(1);
+    }
+  };
+  return (
+    <TouchableOpacity onPress={handleCount}>
+      <View style={isGrey ? style.greyColor : style.circle}></View>
+    </TouchableOpacity>
+  );
+}
+function CircleList(props) {
+  const buttonCount = props.buttonCount;
+  let circle = [];
+  for (let x = 0; x < buttonCount; x++) {
+    circle.push(
+      <CircleComponent key={x} handleGreyCount={props.handleGreyCount} />
+    );
+  }
+  return <View>{circle}</View>;
+}
+
+export default function App() {
+  const [buttonCount, setButtonCount] = useState(0);
+  const [greyCount, setGreyCount] = useState(0);
+  const handleAddCircle = () => {
+    setButtonCount(buttonCount + 1);
+  };
+  const handleGreyCount = (countData) => {
+    setGreyCount(greyCount + countData);
+  };
+  return (
+    <View style={style.container}>
+      <TouchableOpacity style={style.button} onPress={handleAddCircle}>
+        <View> ADD CIRCLE</View>
+      </TouchableOpacity>
+      <View>Grey color count : {greyCount} </View>
+      <CircleList buttonCount={buttonCount} handleGreyCount={handleGreyCount} />
+    </View>
+  );
+}
+
+const style = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 20,
+    width: 100,
+    height: 30,
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "blue",
+    borderRadius: 5
+  },
+  circle: {
+    height: 40,
+    width: 40,
+    borderRadius: "50%",
+    border: "2px solid black"
+  },
+  greyColor: {
+    backgroundColor: "grey",
+    height: 40,
+    width: 40,
+    borderRadius: "50%",
+    border: "2px solid black"
+  }
+});
